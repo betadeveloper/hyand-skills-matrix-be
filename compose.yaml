@@ -1,0 +1,10 @@
+services:
+  mysql:
+    image: 'mysql:latest'
+    environment:
+      - 'MYSQL_DATABASE=skills-matrix'
+      - 'MYSQL_PASSWORD=skills-matrix'
+      - 'MYSQL_ROOT_PASSWORD=skills-matrix'
+      - 'MYSQL_USER=skills-matrix'
+    ports:
+      - '3306'
