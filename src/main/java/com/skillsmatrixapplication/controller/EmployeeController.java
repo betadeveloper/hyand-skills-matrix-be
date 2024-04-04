@@ -2,6 +2,7 @@ package com.skillsmatrixapplication.controller;
 
 import com.skillsmatrixapplication.persistence.entity.Employee;
 import com.skillsmatrixapplication.persistence.repository.EmployeeRepository;
+import com.skillsmatrixapplication.service.EmployeeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,11 +15,13 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class EmployeeController {
 
-
     private final EmployeeRepository employeeRepository;
 
-    public EmployeeController(EmployeeRepository employeeRepository) {
+    private final EmployeeService employeeService;
+
+    public EmployeeController(EmployeeRepository employeeRepository, EmployeeService employeeService) {
         this.employeeRepository = employeeRepository;
+        this.employeeService = employeeService;
     }
 
     @GetMapping("/employees")
@@ -33,22 +36,14 @@ public class EmployeeController {
         return optionalEmployee.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PostMapping("/employees")
+    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
+        Employee savedEmployee = employeeRepository.save(employee);
+        return ResponseEntity.ok(savedEmployee);
+    }
 
-    @PostMapping("/employees/{id}/profile-picture")
-    public ResponseEntity<Employee> uploadProfilePicture(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
-        try {
-            Optional<Employee> optionalEmployee = employeeRepository.findById(id);
-            if (optionalEmployee.isPresent()) {
-                Employee employee = optionalEmployee.get();
-                employee.setProfilePicture(file.getBytes());
-                employeeRepository.save(employee);
-
-                return ResponseEntity.ok(employee);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (IOException e) {
-            return ResponseEntity.unprocessableEntity().build();
-        }
+    @PutMapping("/employees/{id}")
+    public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @RequestBody Employee newEmployeeDetails) {
+        return employeeService.updateEmployee(id, newEmployeeDetails);
     }
 }

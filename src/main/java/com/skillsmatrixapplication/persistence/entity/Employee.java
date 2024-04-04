@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -34,4 +35,12 @@ public class Employee {
     @Lob
     @Column
     private byte[] profilePicture;
+
+    @ManyToMany
+    @JoinTable(
+            name = "employee_owner",
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "owner_id")
+    )
+    private List<Owner> owners;
 }
