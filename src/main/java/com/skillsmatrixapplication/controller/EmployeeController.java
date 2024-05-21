@@ -4,10 +4,10 @@ import com.skillsmatrixapplication.persistence.entity.Employee;
 import com.skillsmatrixapplication.persistence.repository.EmployeeRepository;
 import com.skillsmatrixapplication.service.EmployeeService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +22,15 @@ public class EmployeeController {
     public EmployeeController(EmployeeRepository employeeRepository, EmployeeService employeeService) {
         this.employeeRepository = employeeRepository;
         this.employeeService = employeeService;
+    }
+
+    @GetMapping("/employee/current")
+    public ResponseEntity<Employee> authenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Employee currentEmployee = (Employee) authentication.getPrincipal();
+
+        return ResponseEntity.ok(currentEmployee);
     }
 
     @GetMapping("/employees")
@@ -45,5 +54,10 @@ public class EmployeeController {
     @PutMapping("/employees/{id}")
     public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @RequestBody Employee newEmployeeDetails) {
         return employeeService.updateEmployee(id, newEmployeeDetails);
+    }
+
+    @PutMapping("/employee/current")
+    public ResponseEntity<Employee> updateCurrentEmployee(@RequestBody Employee newEmployeeDetails) {
+        return employeeService.updateCurrentEmployee(newEmployeeDetails);
     }
 }

@@ -27,11 +27,23 @@ public class EmployeeService {
             existingEmployee.setPosition(newEmployeeDetails.getPosition());
             existingEmployee.setDepartment(newEmployeeDetails.getDepartment());
             existingEmployee.setProfilePicture(newEmployeeDetails.getProfilePicture());
-            existingEmployee.setOwners(newEmployeeDetails.getOwners());
             Employee updatedEmployee = employeeRepository.save(existingEmployee);
             return ResponseEntity.ok(updatedEmployee);
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    // Update current employee
+    public ResponseEntity<Employee> updateCurrentEmployee(Employee newEmployeeDetails) {
+        Employee currentEmployee = employeeRepository.findByEmail(newEmployeeDetails.getEmail()).orElseThrow();
+        currentEmployee.setFirstName(newEmployeeDetails.getFirstName());
+        currentEmployee.setLastName(newEmployeeDetails.getLastName());
+        currentEmployee.setEmail(newEmployeeDetails.getEmail());
+        currentEmployee.setPosition(newEmployeeDetails.getPosition());
+        currentEmployee.setDepartment(newEmployeeDetails.getDepartment());
+        currentEmployee.setProfilePicture(newEmployeeDetails.getProfilePicture());
+        Employee updatedEmployee = employeeRepository.save(currentEmployee);
+        return ResponseEntity.ok(updatedEmployee);
     }
 }
