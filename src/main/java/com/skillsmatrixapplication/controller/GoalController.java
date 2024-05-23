@@ -1,5 +1,6 @@
 package com.skillsmatrixapplication.controller;
 
+import com.skillsmatrixapplication.dto.GoalResponse;
 import com.skillsmatrixapplication.persistence.entity.Goal;
 import com.skillsmatrixapplication.service.GoalService;
 import lombok.AllArgsConstructor;
@@ -15,8 +16,8 @@ public class GoalController {
 
     private final GoalService goalService;
 
-    @GetMapping("/employees/{employeeId}/goals")
-    public ResponseEntity<List<Goal>> getEmployeeGoals(@PathVariable Long employeeId) {
+    @GetMapping("/goals/{employeeId}")
+    public ResponseEntity<List<GoalResponse>> getEmployeeGoals(@PathVariable Long employeeId) {
         return ResponseEntity.ok(goalService.getEmployeeGoals(employeeId));
     }
 

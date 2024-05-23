@@ -1,5 +1,6 @@
 package com.skillsmatrixapplication.persistence.entity;
 
+import com.skillsmatrixapplication.enums.RoleEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,7 +30,7 @@ public class Role {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String name;
+    private RoleEnum role;
 
     @Column
     private String description;
@@ -39,8 +40,8 @@ public class Role {
     @ToString.Exclude
     private Set<EmployeeRole> userRoles = new HashSet<>();
 
-    public Role(String name, String description) {
-        this.name = name;
+    public Role(RoleEnum role, String description) {
+        this.role = role;
         this.description = description;
     }
 }

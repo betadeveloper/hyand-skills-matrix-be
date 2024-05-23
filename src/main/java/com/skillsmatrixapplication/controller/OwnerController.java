@@ -6,9 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/owners")
 public class OwnerController {
 
     private final EmployeeService employeeService;
@@ -17,17 +18,22 @@ public class OwnerController {
         this.employeeService = employeeService;
     }
 
-    @GetMapping("/employees/{employeeId}/owners")
-    public ResponseEntity<List<Employee>> getEmployeeOwners(@PathVariable Long employeeId) {
+    @GetMapping("/{employeeId}")
+    public ResponseEntity<List<Set<Employee>>> getEmployeeOwners(@PathVariable Long employeeId) {
         return employeeService.getEmployeeOwners(employeeId);
     }
 
-    @PostMapping("/employees/{employeeId}/owners/{ownerId}")
+    @GetMapping("/currentEmployee")
+    public ResponseEntity<List<Employee>> getCurrentEmployeeOwners() {
+        return employeeService.getCurrentEmployeeOwners();
+    }
+
+    @PostMapping("/{ownerId}/employees/{employeeId}")
     public ResponseEntity<Employee> addOwner(@PathVariable Long employeeId, @PathVariable Long ownerId) {
         return employeeService.addOwner(employeeId, ownerId);
     }
 
-    @DeleteMapping("/employees/{employeeId}/owners/{ownerId}")
+    @DeleteMapping("/{ownerId}/employees/{employeeId}")
     public ResponseEntity<Employee> removeOwner(@PathVariable Long employeeId, @PathVariable Long ownerId) {
         return employeeService.removeOwner(employeeId, ownerId);
     }

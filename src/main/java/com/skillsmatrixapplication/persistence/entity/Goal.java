@@ -1,5 +1,6 @@
 package com.skillsmatrixapplication.persistence.entity;
 
+import com.skillsmatrixapplication.enums.GoalStatusEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +22,16 @@ public class Goal {
     private String description;
 
     @Column
+    private LocalDate startDate;
+
+    @Column
     private LocalDate dueDate;
+
+    @Column
+    private LocalDate endDate;
+
+    @Column
+    private GoalStatusEnum status;
 
     @ManyToOne
     @JoinColumn(name = "employee_id")

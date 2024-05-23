@@ -1,5 +1,7 @@
 package com.skillsmatrixapplication.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.skillsmatrixapplication.model.enums.CareerLevel;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,10 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Table(name = "employees")
 @Getter
@@ -46,7 +45,6 @@ public class Employee implements UserDetails {
     @Column
     private byte[] profilePicture;
 
-
     @Column(nullable = false)
     private String password;
 
@@ -68,15 +66,25 @@ public class Employee implements UserDetails {
                 .toList();
     }
 
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Owner> owners = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "employee_owners",
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "owner_id")
+    )
+    @JsonBackReference
+    private Set<Employee> owners = new HashSet<>();
 
+    @ManyToMany(mappedBy = "owners", fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private Set<Employee> employees = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
     }
 
+    @Override
     public String getPassword() {
         return password;
     }

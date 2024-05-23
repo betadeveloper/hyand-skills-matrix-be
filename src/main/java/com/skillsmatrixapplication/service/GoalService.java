@@ -1,5 +1,6 @@
 package com.skillsmatrixapplication.service;
 
+import com.skillsmatrixapplication.dto.GoalResponse;
 import com.skillsmatrixapplication.persistence.entity.Goal;
 import com.skillsmatrixapplication.persistence.repository.GoalRepository;
 import jakarta.transaction.Transactional;
@@ -16,9 +17,10 @@ public class GoalService {
 
     private final GoalRepository goalRepository;
 
-    public List<Goal> getEmployeeGoals(Long employeeId) {
+    public List<GoalResponse> getEmployeeGoals(Long employeeId) {
         return goalRepository.findAll().stream()
                 .filter(goal -> goal.getEmployee().getId().equals(employeeId))
+                .map(GoalResponse::of)
                 .collect(Collectors.toList());
     }
 

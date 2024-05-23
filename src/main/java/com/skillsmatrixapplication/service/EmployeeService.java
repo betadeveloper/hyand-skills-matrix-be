@@ -7,11 +7,14 @@ import com.skillsmatrixapplication.persistence.repository.EmployeeRepository;
 import com.skillsmatrixapplication.persistence.repository.OwnerRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,7 +46,7 @@ public class EmployeeService {
         }
     }
 
-    // Update current employee
+    @Transactional
     public ResponseEntity<Employee> updateCurrentEmployee(Employee newEmployeeDetails) {
         Employee currentEmployee = employeeRepository.findByEmail(newEmployeeDetails.getEmail()).orElseThrow();
         currentEmployee.setFirstName(newEmployeeDetails.getFirstName());
@@ -84,16 +87,29 @@ public class EmployeeService {
     }
 
     @Transactional
-    public ResponseEntity<List<Employee>> getEmployeeOwners(Long employeeId) {
+    public ResponseEntity<List<Set<Employee>>> getEmployeeOwners(Long employeeId) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
         if (optionalEmployee.isPresent()) {
             Employee employee = optionalEmployee.get();
-            List<Employee> owners = employee.getOwners().stream()
-                    .map(Owner::getOwner)
+            List<Set<Employee>> owners = employee.getOwners().stream()
+                    .map(Employee::getOwners)
                     .collect(Collectors.toList());
             return ResponseEntity.ok(owners);
         } else {
             return ResponseEntity.ok(new ArrayList<>());
         }
+    }
+
+    @Transactional
+    public ResponseEntity<List<Employee>> getCurrentEmployeeOwners() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentEmployeeEmail = authentication.getName();
+
+        Employee currentEmployee = employeeRepository.findByEmail(currentEmployeeEmail)
+                .orElseThrow(() -> new RuntimeException("Current employee not found"));
+
+        List<Employee> owners = new ArrayList<>(currentEmployee.getOwners());
+
+        return ResponseEntity.ok(owners);
     }
 }
