@@ -1,8 +1,8 @@
 package com.skillsmatrixapplication.controller;
 
-import com.skillsmatrixapplication.dto.LoginUserRequest;
-import com.skillsmatrixapplication.dto.LoginUserResponse;
-import com.skillsmatrixapplication.dto.RegisterUserRequest;
+import com.skillsmatrixapplication.dto.LoginEmployeeRequest;
+import com.skillsmatrixapplication.dto.LoginEmployeeResponse;
+import com.skillsmatrixapplication.dto.RegisterEmployeeRequest;
 import com.skillsmatrixapplication.persistence.entity.Employee;
 import com.skillsmatrixapplication.security.JwtService;
 import com.skillsmatrixapplication.service.AuthenticationService;
@@ -25,19 +25,19 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<Employee> register(@RequestBody RegisterUserRequest registerUserRequest) {
-        Employee registeredUser = authenticationService.signup(registerUserRequest);
+    public ResponseEntity<Employee> register(@RequestBody RegisterEmployeeRequest registerEmployeeRequest) {
+        Employee registeredUser = authenticationService.signup(registerEmployeeRequest);
 
         return ResponseEntity.ok(registeredUser);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginUserResponse> authenticate(@RequestBody LoginUserRequest loginUserRequest) {
-        Employee authenticatedEmployee = authenticationService.authenticate(loginUserRequest);
+    public ResponseEntity<LoginEmployeeResponse> authenticate(@RequestBody LoginEmployeeRequest loginEmployeeRequest) {
+        Employee authenticatedEmployee = authenticationService.authenticate(loginEmployeeRequest);
 
         String jwtToken = jwtService.generateToken(authenticatedEmployee);
 
-        LoginUserResponse loginResponse = new LoginUserResponse();
+        LoginEmployeeResponse loginResponse = new LoginEmployeeResponse();
         loginResponse.setToken(jwtToken);
         loginResponse.setExpiresIn(jwtService.getExpirationTime());
 

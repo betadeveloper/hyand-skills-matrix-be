@@ -3,7 +3,7 @@ package com.skillsmatrixapplication.dto;
 import lombok.Data;
 
 @Data
-public class LoginUserRequest {
+public class LoginEmployeeRequest {
     private String email;
     private String password;
 }

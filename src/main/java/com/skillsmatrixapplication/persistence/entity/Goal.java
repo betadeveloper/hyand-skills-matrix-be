@@ -23,6 +23,7 @@ public class Goal {
     @Column
     private LocalDate dueDate;
 
-    @Column
-    private Long employeeId;
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
 }

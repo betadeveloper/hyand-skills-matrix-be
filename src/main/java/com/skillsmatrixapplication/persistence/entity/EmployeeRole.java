@@ -15,15 +15,18 @@ public class EmployeeRole {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "employee_id", nullable = false)
+    @NonNull
     private Employee employee;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
     @JoinColumn(name = "role_id", nullable = false)
+    @NonNull
     private Role role;
 
-    public EmployeeRole(Employee employee, Role role) {
+    public EmployeeRole(final Employee employee, final Role role) {
         this.employee = employee;
         this.role = role;
     }

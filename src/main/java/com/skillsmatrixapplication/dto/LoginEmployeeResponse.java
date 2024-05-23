@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LoginUserResponse {
+public class LoginEmployeeResponse {
     private String token;
 
     private long expiresIn;

@@ -1,7 +1,7 @@
 package com.skillsmatrixapplication.service;
 
-import com.skillsmatrixapplication.dto.LoginUserRequest;
-import com.skillsmatrixapplication.dto.RegisterUserRequest;
+import com.skillsmatrixapplication.dto.LoginEmployeeRequest;
+import com.skillsmatrixapplication.dto.RegisterEmployeeRequest;
 import com.skillsmatrixapplication.persistence.entity.Employee;
 import com.skillsmatrixapplication.persistence.repository.EmployeeRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,7 +27,7 @@ public class AuthenticationService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Employee signup(RegisterUserRequest input) {
+    public Employee signup(RegisterEmployeeRequest input) {
         Employee employee = new Employee();
         employee.setFirstName(input.getFirstName());
         employee.setLastName(input.getLastName());
@@ -37,7 +37,7 @@ public class AuthenticationService {
         return employeeRepository.save(employee);
     }
 
-    public Employee authenticate(LoginUserRequest input) {
+    public Employee authenticate(LoginEmployeeRequest input) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         input.getEmail(),
