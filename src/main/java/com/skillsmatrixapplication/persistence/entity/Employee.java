@@ -1,7 +1,7 @@
 package com.skillsmatrixapplication.persistence.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.skillsmatrixapplication.model.enums.CareerLevel;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -17,6 +17,7 @@ import java.util.*;
 @Getter
 @Setter
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Employee implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,11 +73,9 @@ public class Employee implements UserDetails {
             joinColumns = @JoinColumn(name = "employee_id"),
             inverseJoinColumns = @JoinColumn(name = "owner_id")
     )
-    @JsonBackReference
     private Set<Employee> owners = new HashSet<>();
 
     @ManyToMany(mappedBy = "owners", fetch = FetchType.EAGER)
-    @JsonManagedReference
     private Set<Employee> employees = new HashSet<>();
 
     @Override

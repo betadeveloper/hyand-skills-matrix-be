@@ -1,30 +1,23 @@
 package com.skillsmatrixapplication.persistence.entity;
 
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
 @Entity
-public class Progress {
+@Table(name = "career_path")
+public class CareerPath {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private Long goalId;
+    private Integer careerPathScore;
 
-    @Column
-    private LocalDate date;
-
-    @Column
-    private String progressMade;
-
-    @Column
-    private String notes;
+    @OneToMany(mappedBy = "careerPath")
+    private List<Skill> careerPathSkills;
 }

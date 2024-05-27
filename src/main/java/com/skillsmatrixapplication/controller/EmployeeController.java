@@ -1,5 +1,6 @@
 package com.skillsmatrixapplication.controller;
 
+import com.skillsmatrixapplication.dto.EmployeeResponse;
 import com.skillsmatrixapplication.persistence.entity.Employee;
 import com.skillsmatrixapplication.persistence.repository.EmployeeRepository;
 import com.skillsmatrixapplication.service.EmployeeService;
@@ -52,12 +53,12 @@ public class EmployeeController {
     }
 
     @PutMapping("/employees/{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @RequestBody Employee newEmployeeDetails) {
+    public ResponseEntity<EmployeeResponse> updateEmployee(@PathVariable Long id, @RequestBody EmployeeResponse newEmployeeDetails) {
         return employeeService.updateEmployee(id, newEmployeeDetails);
     }
 
     @PutMapping("/employee/current")
-    public ResponseEntity<Employee> updateCurrentEmployee(@RequestBody Employee newEmployeeDetails) {
+    public ResponseEntity<EmployeeResponse> updateCurrentEmployee(@RequestBody EmployeeResponse newEmployeeDetails) {
         return employeeService.updateCurrentEmployee(newEmployeeDetails);
     }
 }

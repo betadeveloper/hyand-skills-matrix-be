@@ -1,6 +1,7 @@
 package com.skillsmatrixapplication.service;
 
 
+import com.skillsmatrixapplication.dto.EmployeeResponse;
 import com.skillsmatrixapplication.persistence.entity.Employee;
 import com.skillsmatrixapplication.persistence.entity.Owner;
 import com.skillsmatrixapplication.persistence.repository.EmployeeRepository;
@@ -29,35 +30,49 @@ public class EmployeeService {
         this.ownerRepository = ownerRepository;
     }
 
-    public ResponseEntity<Employee> updateEmployee(Long id, Employee newEmployeeDetails) {
+    public ResponseEntity<EmployeeResponse> updateEmployee(Long id, EmployeeResponse newEmployeeDetails) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(id);
         if (optionalEmployee.isPresent()) {
             Employee existingEmployee = optionalEmployee.get();
             existingEmployee.setFirstName(newEmployeeDetails.getFirstName());
             existingEmployee.setLastName(newEmployeeDetails.getLastName());
-            existingEmployee.setEmail(newEmployeeDetails.getEmail());
             existingEmployee.setPosition(newEmployeeDetails.getPosition());
             existingEmployee.setDepartment(newEmployeeDetails.getDepartment());
-            existingEmployee.setProfilePicture(newEmployeeDetails.getProfilePicture());
-            Employee updatedEmployee = employeeRepository.save(existingEmployee);
+            EmployeeResponse updatedEmployee = EmployeeResponse.of(employeeRepository.save(existingEmployee));
             return ResponseEntity.ok(updatedEmployee);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
-
     @Transactional
-    public ResponseEntity<Employee> updateCurrentEmployee(Employee newEmployeeDetails) {
-        Employee currentEmployee = employeeRepository.findByEmail(newEmployeeDetails.getEmail()).orElseThrow();
-        currentEmployee.setFirstName(newEmployeeDetails.getFirstName());
-        currentEmployee.setLastName(newEmployeeDetails.getLastName());
-        currentEmployee.setEmail(newEmployeeDetails.getEmail());
-        currentEmployee.setPosition(newEmployeeDetails.getPosition());
-        currentEmployee.setDepartment(newEmployeeDetails.getDepartment());
-        currentEmployee.setProfilePicture(newEmployeeDetails.getProfilePicture());
-        Employee updatedEmployee = employeeRepository.save(currentEmployee);
+    public ResponseEntity<EmployeeResponse> updateCurrentEmployee(EmployeeResponse newEmployeeDetails) {
+        String currentEmployeeEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Employee currentEmployee = employeeRepository.findByEmail(currentEmployeeEmail)
+                .orElseThrow(() -> new RuntimeException("Current employee not found"));
+
+        if (newEmployeeDetails.getFirstName() != null) {
+            currentEmployee.setFirstName(newEmployeeDetails.getFirstName());
+        }
+        if (newEmployeeDetails.getLastName() != null) {
+            currentEmployee.setLastName(newEmployeeDetails.getLastName());
+        }
+
+        if (newEmployeeDetails.getEmail() != null) {
+            currentEmployee.setEmail(newEmployeeDetails.getEmail());
+        }
+
+        if (newEmployeeDetails.getPosition() != null) {
+            currentEmployee.setPosition(newEmployeeDetails.getPosition());
+        }
+        if (newEmployeeDetails.getDepartment() != null) {
+            currentEmployee.setDepartment(newEmployeeDetails.getDepartment());
+        }
+
+        EmployeeResponse updatedEmployee = EmployeeResponse.of(employeeRepository.save(currentEmployee));
+
         return ResponseEntity.ok(updatedEmployee);
     }
+
 
     @Transactional
     public ResponseEntity<Employee> addOwner(Long employeeId, Long ownerId) {
@@ -112,4 +127,5 @@ public class EmployeeService {
 
         return ResponseEntity.ok(owners);
     }
+
 }
