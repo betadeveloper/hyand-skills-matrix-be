@@ -33,7 +33,7 @@ public class Goal {
     @Column
     private GoalStatusEnum status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")
     private Employee employee;
 }

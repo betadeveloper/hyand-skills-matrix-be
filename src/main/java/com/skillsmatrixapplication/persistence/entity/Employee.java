@@ -75,8 +75,12 @@ public class Employee implements UserDetails {
     )
     private Set<Employee> owners = new HashSet<>();
 
-    @ManyToMany(mappedBy = "owners", fetch = FetchType.EAGER)
-    private Set<Employee> employees = new HashSet<>();
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "career_path_id")
+    private CareerPath careerPath;
+
+    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
+    private List<EmployeeSkill> employeeSkills;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

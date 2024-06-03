@@ -16,8 +16,15 @@ public class CareerPath {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer careerPathScore;
+    @Column
+    private String name;
 
-    @OneToMany(mappedBy = "careerPath")
-    private List<Skill> careerPathSkills;
+    @Column
+    private String description;
+
+    @Column
+    private Double score;
+
+    @OneToMany(mappedBy = "careerPath", fetch = FetchType.EAGER)
+    private List<Skill> skills;
 }

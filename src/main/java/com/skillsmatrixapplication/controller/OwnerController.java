@@ -27,14 +27,4 @@ public class OwnerController {
     public ResponseEntity<List<Employee>> getCurrentEmployeeOwners() {
         return employeeService.getCurrentEmployeeOwners();
     }
-
-    @PostMapping("/{ownerId}/employees/{employeeId}")
-    public ResponseEntity<Employee> addOwner(@PathVariable Long employeeId, @PathVariable Long ownerId) {
-        return employeeService.addOwner(employeeId, ownerId);
-    }
-
-    @DeleteMapping("/{ownerId}/employees/{employeeId}")
-    public ResponseEntity<Employee> removeOwner(@PathVariable Long employeeId, @PathVariable Long ownerId) {
-        return employeeService.removeOwner(employeeId, ownerId);
-    }
 }

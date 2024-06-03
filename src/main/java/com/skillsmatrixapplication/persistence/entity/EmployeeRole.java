@@ -15,13 +15,13 @@ public class EmployeeRole {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id", nullable = false)
     @NonNull
     private Employee employee;
 
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     @NonNull
     private Role role;
