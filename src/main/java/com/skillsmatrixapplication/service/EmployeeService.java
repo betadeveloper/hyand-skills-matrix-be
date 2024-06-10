@@ -2,8 +2,14 @@ package com.skillsmatrixapplication.service;
 
 
 import com.skillsmatrixapplication.dto.EmployeeResponse;
+import com.skillsmatrixapplication.exception.ExceptionMessages;
+import com.skillsmatrixapplication.exception.ResourceNotFoundException;
+import com.skillsmatrixapplication.persistence.entity.CareerPath;
 import com.skillsmatrixapplication.persistence.entity.Employee;
+import com.skillsmatrixapplication.persistence.entity.Skill;
+import com.skillsmatrixapplication.persistence.repository.CareerPathRepository;
 import com.skillsmatrixapplication.persistence.repository.EmployeeRepository;
+import com.skillsmatrixapplication.persistence.repository.SkillRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -21,8 +27,42 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
-    public EmployeeService(EmployeeRepository employeeRepository) {
+
+    private final CareerPathRepository careerPathRepository;
+
+    private final SkillRepository skillRepository;
+
+    public EmployeeService(EmployeeRepository employeeRepository, CareerPathRepository careerPathRepository, SkillRepository skillRepository) {
         this.employeeRepository = employeeRepository;
+        this.careerPathRepository = careerPathRepository;
+        this.skillRepository = skillRepository;
+    }
+
+    @Transactional
+    public void assignCareerPathToEmployee(Long employeeId, Long careerPathId) {
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionMessages.EMPLOYEE_NOT_FOUND));
+        CareerPath careerPath = careerPathRepository.findById(careerPathId)
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionMessages.CAREER_PATH_NOT_FOUND));
+
+        employee.setCareerPath(careerPath);
+        employeeRepository.save(employee);
+    }
+
+    @Transactional
+    public void assignSkillsToCareerPath(Long careerPathId, List<Long> skillIds) {
+        CareerPath careerPath = careerPathRepository.findById(careerPathId)
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionMessages.CAREER_PATH_NOT_FOUND));
+        List<Skill> skills = skillRepository.findAllById(skillIds);
+
+        careerPath.setSkills(skills);
+        careerPathRepository.save(careerPath);
+    }
+
+    @Transactional
+    public void assignSkillsToEmployee(Long employeeId, Long careerPathId, List<Long> skillIds) {
+        assignCareerPathToEmployee(employeeId, careerPathId);
+        assignSkillsToCareerPath(careerPathId, skillIds);
     }
 
     public ResponseEntity<EmployeeResponse> updateEmployee(Long id, EmployeeResponse newEmployeeDetails) {

@@ -61,4 +61,19 @@ public class EmployeeController {
     public ResponseEntity<EmployeeResponse> updateCurrentEmployee(@RequestBody EmployeeResponse newEmployeeDetails) {
         return employeeService.updateCurrentEmployee(newEmployeeDetails);
     }
+
+    @PostMapping("/{employeeId}/careerPaths/{careerPathId}/skills")
+    public ResponseEntity<Void> assignSkillsToEmployee(@PathVariable Long employeeId,
+                                                       @PathVariable Long careerPathId,
+                                                       @RequestBody List<Long> skillIds) {
+        employeeService.assignSkillsToEmployee(employeeId, careerPathId, skillIds);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{employeeId}/careerPaths/{careerPathId}")
+    public ResponseEntity<Void> assignCareerPathToEmployee(@PathVariable Long employeeId,
+                                                           @PathVariable Long careerPathId) {
+        employeeService.assignCareerPathToEmployee(employeeId, careerPathId);
+        return ResponseEntity.ok().build();
+    }
 }

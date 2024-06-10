@@ -11,6 +11,8 @@ public final class ExceptionMessages {
     public static final String EMPLOYEE_NOT_FOUND = "Employee not found";
     public static final String ROLE_NOT_FOUND = "Role not found";
     public static final String SKILL_NOT_FOUND = "Skill not found";
+    public static final String CAREER_PATH_NOT_FOUND = "Career path not found";
+
 
     private ExceptionMessages() {
     }

@@ -1,6 +1,7 @@
 package com.skillsmatrixapplication.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.skillsmatrixapplication.model.enums.CareerLevel;
 import jakarta.persistence.*;
@@ -79,6 +80,7 @@ public class Employee implements UserDetails {
     @JoinColumn(name = "career_path_id")
     private CareerPath careerPath;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
     private List<EmployeeSkill> employeeSkills;
 
