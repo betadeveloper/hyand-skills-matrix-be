@@ -1,8 +1,7 @@
 package com.skillsmatrixapplication.persistence.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.skillsmatrixapplication.model.enums.CareerLevel;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,7 +17,6 @@ import java.util.*;
 @Getter
 @Setter
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Employee implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,6 +57,7 @@ public class Employee implements UserDetails {
     private Date updatedAt;
 
     @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
+    @JsonManagedReference(value = "employee-employeeRole")
     private List<EmployeeRole> employeeRoles = new ArrayList<>();
 
     public List<Role> getRoles() {
@@ -78,10 +77,11 @@ public class Employee implements UserDetails {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "career_path_id")
+    @JsonBackReference(value = "careerPath-employee")
     private CareerPath careerPath;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
+    @JsonManagedReference(value = "employee-employeeSkill")
     private List<EmployeeSkill> employeeSkills;
 
     @Override

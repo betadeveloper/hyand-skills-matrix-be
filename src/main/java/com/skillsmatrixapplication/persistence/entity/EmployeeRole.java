@@ -1,5 +1,6 @@
 package com.skillsmatrixapplication.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,8 +19,8 @@ public class EmployeeRole {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id", nullable = false)
     @NonNull
+    @JsonBackReference(value = "employee-employeeRole")
     private Employee employee;
-
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)

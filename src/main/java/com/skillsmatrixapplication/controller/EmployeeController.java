@@ -1,6 +1,7 @@
 package com.skillsmatrixapplication.controller;
 
 import com.skillsmatrixapplication.dto.EmployeeResponse;
+import com.skillsmatrixapplication.model.enums.CareerLevel;
 import com.skillsmatrixapplication.persistence.entity.Employee;
 import com.skillsmatrixapplication.persistence.repository.EmployeeRepository;
 import com.skillsmatrixapplication.service.EmployeeService;
@@ -60,6 +61,11 @@ public class EmployeeController {
     @PutMapping("/employee/current")
     public ResponseEntity<EmployeeResponse> updateCurrentEmployee(@RequestBody EmployeeResponse newEmployeeDetails) {
         return employeeService.updateCurrentEmployee(newEmployeeDetails);
+    }
+
+    @PutMapping("/employee/current/careerLevel")
+    public ResponseEntity<EmployeeResponse> updateCurrentEmployeeCareerLevel(@RequestBody String newCareerLevel) {
+        return employeeService.updateCareerLevel(CareerLevel.valueOf(newCareerLevel));
     }
 
     @PostMapping("/{employeeId}/careerPaths/{careerPathId}/skills")

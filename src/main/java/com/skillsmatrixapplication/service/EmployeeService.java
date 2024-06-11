@@ -4,6 +4,7 @@ package com.skillsmatrixapplication.service;
 import com.skillsmatrixapplication.dto.EmployeeResponse;
 import com.skillsmatrixapplication.exception.ExceptionMessages;
 import com.skillsmatrixapplication.exception.ResourceNotFoundException;
+import com.skillsmatrixapplication.model.enums.CareerLevel;
 import com.skillsmatrixapplication.persistence.entity.CareerPath;
 import com.skillsmatrixapplication.persistence.entity.Employee;
 import com.skillsmatrixapplication.persistence.entity.Skill;
@@ -133,6 +134,16 @@ public class EmployeeService {
         List<Employee> owners = new ArrayList<>(currentEmployee.getOwners());
 
         return ResponseEntity.ok(owners);
+    }
+
+    @Transactional
+    public ResponseEntity<EmployeeResponse> updateCareerLevel(CareerLevel newCareerLevel) {
+        String currentEmployeeEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Employee currentEmployee = employeeRepository.findByEmail(currentEmployeeEmail)
+                .orElseThrow(() -> new RuntimeException("Current employee not found"));
+        currentEmployee.setCareerLevel(newCareerLevel);
+        EmployeeResponse updatedEmployee = EmployeeResponse.of(employeeRepository.save(currentEmployee));
+        return ResponseEntity.ok(updatedEmployee);
     }
 
 }

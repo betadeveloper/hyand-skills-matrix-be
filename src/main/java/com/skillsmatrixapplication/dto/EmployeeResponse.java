@@ -27,11 +27,16 @@ public class EmployeeResponse {
 
     public static EmployeeResponse of(final Employee employee) {
         return EmployeeResponse.builder()
+                .id(employee.getId())
                 .firstName(employee.getFirstName())
                 .lastName(employee.getLastName())
                 .email(employee.getEmail())
                 .position(employee.getPosition())
+                .careerLevel(employee.getCareerLevel())
                 .department(employee.getDepartment())
+                .createdAt(employee.getCreatedAt())
+                .updatedAt(employee.getUpdatedAt())
+                .roles(employee.getRoles())
                 .build();
     }
 }
