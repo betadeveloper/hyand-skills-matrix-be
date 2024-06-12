@@ -21,6 +21,11 @@ public class GoalController {
         return ResponseEntity.ok(goalService.getEmployeeGoals(employeeId));
     }
 
+    @GetMapping("/goals/currentEmployee")
+    public ResponseEntity<List<GoalResponse>> getCurrentEmployeeGoals() {
+        return ResponseEntity.ok(goalService.getCurrentEmployeeGoals());
+    }
+
     @PostMapping("/goal")
     public ResponseEntity<Goal> createGoal(@RequestBody Goal goal) {
         return ResponseEntity.ok(goalService.createGoal(goal));
