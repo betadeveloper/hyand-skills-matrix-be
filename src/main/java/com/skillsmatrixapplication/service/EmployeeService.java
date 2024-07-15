@@ -146,4 +146,26 @@ public class EmployeeService {
         return ResponseEntity.ok(updatedEmployee);
     }
 
+public ResponseEntity<EmployeeResponse> addOwner(Long employeeId, Employee owner) {
+        Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
+        if (optionalEmployee.isPresent()) {
+            Employee employee = optionalEmployee.get();
+            employee.getOwners().add(owner);
+            EmployeeResponse updatedEmployee = EmployeeResponse.of(employeeRepository.save(employee));
+            return ResponseEntity.ok(updatedEmployee);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @Transactional
+    public ResponseEntity<EmployeeResponse> addCurrentEmployeeOwner(Employee owner) {
+        String currentEmployeeEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Employee currentEmployee = employeeRepository.findByEmail(currentEmployeeEmail)
+                .orElseThrow(() -> new RuntimeException("Current employee not found"));
+        currentEmployee.getOwners().add(owner);
+        EmployeeResponse updatedEmployee = EmployeeResponse.of(employeeRepository.save(currentEmployee));
+        return ResponseEntity.ok(updatedEmployee);
+    }
+
 }

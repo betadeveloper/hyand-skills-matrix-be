@@ -1,5 +1,6 @@
 package com.skillsmatrixapplication.controller;
 
+import com.skillsmatrixapplication.dto.EmployeeResponse;
 import com.skillsmatrixapplication.persistence.entity.Employee;
 import com.skillsmatrixapplication.service.EmployeeService;
 import org.springframework.http.ResponseEntity;
@@ -26,5 +27,15 @@ public class OwnerController {
     @GetMapping("/currentEmployee")
     public ResponseEntity<List<Employee>> getCurrentEmployeeOwners() {
         return employeeService.getCurrentEmployeeOwners();
+    }
+
+    @PostMapping("/{employeeId}")
+    public ResponseEntity<EmployeeResponse> addOwner(@PathVariable Long employeeId, @RequestBody Employee owner) {
+        return employeeService.addOwner(employeeId, owner);
+    }
+
+    @PostMapping("/currentEmployee")
+    public ResponseEntity<EmployeeResponse> addCurrentEmployeeOwner(@RequestBody Employee owner) {
+        return employeeService.addCurrentEmployeeOwner(owner);
     }
 }
