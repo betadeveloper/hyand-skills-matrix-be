@@ -60,6 +60,10 @@ public class Employee implements UserDetails {
     @JsonManagedReference(value = "employee-employeeRole")
     private List<EmployeeRole> employeeRoles = new ArrayList<>();
 
+    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Feedback> feedbackEntries = new ArrayList<>();
+
     public List<Role> getRoles() {
         return employeeRoles
                 .stream()
