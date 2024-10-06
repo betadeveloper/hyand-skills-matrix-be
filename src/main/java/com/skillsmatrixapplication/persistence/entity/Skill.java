@@ -11,7 +11,6 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "skill")
 public class Skill {
 
     @Id
