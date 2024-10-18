@@ -1,7 +1,7 @@
 package com.skillsmatrixapplication.enums;
 
 public enum RoleEnum {
-    ADMIN,
-    OWNER,
-    EMPLOYEE
+    ROLE_ADMIN,
+    ROLE_OWNER,
+    ROLE_EMPLOYEE
 }

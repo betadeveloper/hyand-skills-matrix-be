@@ -1,10 +1,6 @@
 package com.skillsmatrixapplication.persistence.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Lob;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,6 +17,7 @@ public class WikiDocument {
     private String category;
 
     @Lob
+    @Column(name = "file_data", columnDefinition = "MEDIUMBLOB")
     private byte[] fileData;
 
     private String fileType;

@@ -1,11 +1,12 @@
 package com.skillsmatrixapplication.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+import java.util.List;
+
+@Data
 public class LoginEmployeeResponse {
     private String token;
     private long expiresIn;
+    private List<String> roles;
 }

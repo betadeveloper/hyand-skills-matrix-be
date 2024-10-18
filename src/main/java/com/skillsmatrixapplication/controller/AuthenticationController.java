@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RequestMapping("/auth")
 @RestController
 public class AuthenticationController {
     private final JwtService jwtService;
-
     private final AuthenticationService authenticationService;
 
     public AuthenticationController(JwtService jwtService, AuthenticationService authenticationService) {
@@ -27,7 +28,6 @@ public class AuthenticationController {
     @PostMapping("/signup")
     public ResponseEntity<Employee> register(@RequestBody RegisterEmployeeRequest registerEmployeeRequest) {
         Employee registeredUser = authenticationService.signup(registerEmployeeRequest);
-
         return ResponseEntity.ok(registeredUser);
     }
 
@@ -37,11 +37,15 @@ public class AuthenticationController {
 
         String jwtToken = jwtService.generateToken(authenticatedEmployee);
 
+        List<String> roles = authenticatedEmployee.getAuthorities().stream()
+                .map(authority -> authority.getAuthority())
+                .toList();
+
         LoginEmployeeResponse loginResponse = new LoginEmployeeResponse();
         loginResponse.setToken(jwtToken);
+        loginResponse.setRoles(roles);
         loginResponse.setExpiresIn(jwtService.getExpirationTime());
 
         return ResponseEntity.ok(loginResponse);
     }
 }
-

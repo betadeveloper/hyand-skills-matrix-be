@@ -6,6 +6,7 @@ import com.skillsmatrixapplication.persistence.entity.Employee;
 import com.skillsmatrixapplication.persistence.repository.EmployeeRepository;
 import com.skillsmatrixapplication.service.EmployeeService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -35,18 +36,21 @@ public class EmployeeController {
         return ResponseEntity.ok(currentEmployee);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'OWNER')")
     @GetMapping("/employees")
     public ResponseEntity<List<Employee>> getEmployees() {
         List<Employee> employees = employeeRepository.findAll();
         return ResponseEntity.ok(employees);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'OWNER')")
     @GetMapping("/employees/{id}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(id);
         return optionalEmployee.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'OWNER')")
     @PostMapping("/employees")
     public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
         Employee savedEmployee = employeeRepository.save(employee);

@@ -2,14 +2,18 @@ package com.skillsmatrixapplication.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.skillsmatrixapplication.enums.RoleEnum;
 import com.skillsmatrixapplication.model.enums.CareerLevel;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.*;
 
@@ -18,6 +22,7 @@ import java.util.*;
 @Setter
 @Entity
 public class Employee implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -57,19 +62,10 @@ public class Employee implements UserDetails {
     private Date updatedAt;
 
     @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
-    @JsonManagedReference(value = "employee-employeeRole")
-    private List<EmployeeRole> employeeRoles = new ArrayList<>();
-
-    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List<Feedback> feedbackEntries = new ArrayList<>();
-
-    public List<Role> getRoles() {
-        return employeeRoles
-                .stream()
-                .map(EmployeeRole::getRole)
-                .toList();
-    }
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private List<EmployeeRole> employeeRoles = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -81,16 +77,18 @@ public class Employee implements UserDetails {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "career_path_id")
-    @JsonBackReference(value = "careerPath-employee")
+    @JsonBackReference
     private CareerPath careerPath;
 
     @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
-    @JsonManagedReference(value = "employee-employeeSkill")
+    @JsonManagedReference
     private List<EmployeeSkill> employeeSkills;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return employeeRoles.stream()
+                .map(employeeRole -> new SimpleGrantedAuthority(employeeRole.getRole().getRole().name()))
+                .toList();
     }
 
     @Override
@@ -121,5 +119,16 @@ public class Employee implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public List<RoleEnum> getRoles() {
+        return employeeRoles.stream()
+                .map(employeeRole -> employeeRole.getRole().getRole())
+                .toList();
+    }
+
+    public void addRole(Role role) {
+        EmployeeRole employeeRole = new EmployeeRole(this, role);
+        this.employeeRoles.add(employeeRole);
     }
 }

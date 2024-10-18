@@ -1,5 +1,6 @@
 package com.skillsmatrixapplication.dto;
 
+import com.skillsmatrixapplication.enums.RoleEnum;
 import com.skillsmatrixapplication.model.enums.CareerLevel;
 import com.skillsmatrixapplication.persistence.entity.Employee;
 import com.skillsmatrixapplication.persistence.entity.Role;
@@ -23,7 +24,7 @@ public class EmployeeResponse {
     private String department;
     private Date createdAt;
     private Date updatedAt;
-    private List<Role> roles;
+    private List<RoleEnum> roles;
 
     public static EmployeeResponse of(final Employee employee) {
         return EmployeeResponse.builder()
