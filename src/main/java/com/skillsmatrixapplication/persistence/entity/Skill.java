@@ -31,7 +31,7 @@ public class Skill {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "career_path_id")
-    @JsonBackReference(value = "careerPath-skill")
+    @JsonBackReference(value = "careerPath-skill-ref")
     private CareerPath careerPath;
 
     @OneToMany(mappedBy = "skill", fetch = FetchType.EAGER)

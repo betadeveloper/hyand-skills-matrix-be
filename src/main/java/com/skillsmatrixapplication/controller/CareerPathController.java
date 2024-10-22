@@ -77,4 +77,10 @@ public class CareerPathController {
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @DeleteMapping("/careerPaths/{id}")
+    public ResponseEntity<Void> deleteCareerPath(@PathVariable Long id) {
+        careerPathRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }

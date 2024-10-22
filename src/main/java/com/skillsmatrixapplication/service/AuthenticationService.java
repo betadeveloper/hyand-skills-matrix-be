@@ -7,6 +7,7 @@ import com.skillsmatrixapplication.persistence.entity.EmployeeRole;
 import com.skillsmatrixapplication.persistence.entity.Role;
 import com.skillsmatrixapplication.enums.RoleEnum;
 import com.skillsmatrixapplication.persistence.repository.EmployeeRepository;
+import com.skillsmatrixapplication.persistence.repository.EmployeeRoleRepository;
 import com.skillsmatrixapplication.persistence.repository.RoleRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,17 +20,19 @@ public class AuthenticationService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final EmployeeRoleRepository employeeRoleRepository;
 
     public AuthenticationService(
             EmployeeRepository employeeRepository,
             RoleRepository roleRepository,
             AuthenticationManager authenticationManager,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder, EmployeeRoleRepository employeeRoleRepository
     ) {
         this.authenticationManager = authenticationManager;
         this.employeeRepository = employeeRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.employeeRoleRepository = employeeRoleRepository;
     }
 
     public Employee signup(RegisterEmployeeRequest input) {
@@ -38,6 +41,11 @@ public class AuthenticationService {
         employee.setLastName(input.getLastName());
         employee.setEmail(input.getEmail());
         employee.setPassword(passwordEncoder.encode(input.getPassword()));
+
+        roleRepository.save(new Role(RoleEnum.ROLE_EMPLOYEE, "Employee"));
+        roleRepository.save(new Role(RoleEnum.ROLE_OWNER, "Owner"));
+        roleRepository.save(new Role(RoleEnum.ROLE_ADMIN, "Admin"));
+        employeeRoleRepository.save(new EmployeeRole(employee, roleRepository.findByRole(RoleEnum.ROLE_EMPLOYEE).get()));
 
         return employeeRepository.save(employee);
     }
