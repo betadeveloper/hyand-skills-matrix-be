@@ -26,11 +26,10 @@ public class CareerPath {
     @Column
     private Double score;
 
-    @OneToMany(mappedBy = "careerPath", fetch = FetchType.EAGER)
-    @JsonManagedReference(value = "careerPath-skill")
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Skill> skills;
 
-    @OneToMany(mappedBy = "careerPath", fetch = FetchType.EAGER)
-    @JsonManagedReference(value = "careerPath-employee")
+    @OneToMany(fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<Employee> employees;
 }

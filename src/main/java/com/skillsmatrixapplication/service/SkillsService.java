@@ -13,11 +13,9 @@ import java.util.List;
 public class SkillsService {
 
     private final SkillRepository skillRepository;
-    private final CareerPathRepository careerPathRepository;
 
     public SkillsService(SkillRepository skillRepository, CareerPathRepository careerPathRepository) {
         this.skillRepository = skillRepository;
-        this.careerPathRepository = careerPathRepository;
     }
 
     public List<Skill> getSkillsByCareerPathId(Long careerPathId) {
@@ -25,10 +23,7 @@ public class SkillsService {
     }
 
     public Skill createSkill(Long careerPathId, Skill skill) {
-        CareerPath careerPath = careerPathRepository.findById(careerPathId)
-                .orElseThrow(() -> new ResourceNotFoundException("CareerPath not found with id " + careerPathId));
-
-        skill.setCareerPath(careerPath);
+        skill.setCareerPathId(careerPathId);
         System.out.println("Creating skill: " + skill);
 
         return skillRepository.save(skill);

@@ -1,6 +1,7 @@
 package com.skillsmatrixapplication.service;
 
 
+import com.skillsmatrixapplication.dto.AddOwnerDTO;
 import com.skillsmatrixapplication.dto.EmployeeResponse;
 import com.skillsmatrixapplication.exception.ExceptionMessages;
 import com.skillsmatrixapplication.exception.ResourceNotFoundException;
@@ -146,7 +147,7 @@ public class EmployeeService {
         return ResponseEntity.ok(updatedEmployee);
     }
 
-public ResponseEntity<EmployeeResponse> addOwner(Long employeeId, Employee owner) {
+public ResponseEntity<EmployeeResponse> addOwner(Long employeeId, AddOwnerDTO owner) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
         if (optionalEmployee.isPresent()) {
             Employee employee = optionalEmployee.get();
@@ -159,7 +160,7 @@ public ResponseEntity<EmployeeResponse> addOwner(Long employeeId, Employee owner
     }
 
     @Transactional
-    public ResponseEntity<EmployeeResponse> addCurrentEmployeeOwner(Employee owner) {
+    public ResponseEntity<EmployeeResponse> addCurrentEmployeeOwner(AddOwnerDTO owner) {
         String currentEmployeeEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         Employee currentEmployee = employeeRepository.findByEmail(currentEmployeeEmail)
                 .orElseThrow(() -> new RuntimeException("Current employee not found"));

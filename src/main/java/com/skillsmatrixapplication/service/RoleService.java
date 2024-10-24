@@ -34,4 +34,9 @@ public class RoleService {
         EmployeeRole employeeRole = new EmployeeRole(employee, role);
         return employeeRoleRepository.save(employeeRole);
     }
+
+    @Transactional
+    public EmployeeRole getEmployeeRole(Long employeeId) {
+        return employeeRoleRepository.findByEmployeeId(employeeId);
+    }
 }

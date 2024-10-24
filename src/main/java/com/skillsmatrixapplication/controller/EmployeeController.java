@@ -3,8 +3,10 @@ package com.skillsmatrixapplication.controller;
 import com.skillsmatrixapplication.dto.EmployeeResponse;
 import com.skillsmatrixapplication.model.enums.CareerLevel;
 import com.skillsmatrixapplication.persistence.entity.Employee;
+import com.skillsmatrixapplication.persistence.entity.EmployeeRole;
 import com.skillsmatrixapplication.persistence.repository.EmployeeRepository;
 import com.skillsmatrixapplication.service.EmployeeService;
+import com.skillsmatrixapplication.service.RoleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -22,9 +24,12 @@ public class EmployeeController {
 
     private final EmployeeService employeeService;
 
-    public EmployeeController(EmployeeRepository employeeRepository, EmployeeService employeeService) {
+    private final RoleService roleService;
+
+    public EmployeeController(EmployeeRepository employeeRepository, EmployeeService employeeService, RoleService roleService) {
         this.employeeRepository = employeeRepository;
         this.employeeService = employeeService;
+        this.roleService = roleService;
     }
 
     @GetMapping("/employee/current")
@@ -32,6 +37,10 @@ public class EmployeeController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         Employee currentEmployee = (Employee) authentication.getPrincipal();
+
+        EmployeeRole currentRole = roleService.getEmployeeRole(currentEmployee.getId());
+
+        currentEmployee.setCurrentRole(currentRole.getRole().getRole().name());
 
         return ResponseEntity.ok(currentEmployee);
     }

@@ -29,12 +29,10 @@ public class Skill {
     @Column
     private Double proficiency;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "career_path_id")
-    @JsonBackReference(value = "careerPath-skill-ref")
-    private CareerPath careerPath;
+    @Column(name = "career_path_id")
+    private Long careerPathId;
 
-    @OneToMany(mappedBy = "skill", fetch = FetchType.EAGER)
-    @JsonManagedReference(value = "skill-employeeSkill")
+    @OneToMany(fetch = FetchType.EAGER)
     private List<EmployeeSkill> employeeSkills;
+
 }

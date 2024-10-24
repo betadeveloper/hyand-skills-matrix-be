@@ -18,7 +18,7 @@ public class GoalResponse {
     private LocalDate startDate;
     private LocalDate dueDate;
     private LocalDate endDate;
-    private EmployeeResponse employee;
+    private Long employeeId;
 
     public static GoalResponse of(final Goal goal) {
         return GoalResponse.builder()
@@ -29,7 +29,7 @@ public class GoalResponse {
                 .startDate(goal.getStartDate())
                 .endDate(goal.getEndDate())
                 .dueDate(goal.getDueDate())
-                .employee(EmployeeResponse.of(goal.getEmployee()))
+                .employeeId(goal.getEmployeeId())
                 .build();
     }
 }

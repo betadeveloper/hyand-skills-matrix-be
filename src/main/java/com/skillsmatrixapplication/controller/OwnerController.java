@@ -1,5 +1,6 @@
 package com.skillsmatrixapplication.controller;
 
+import com.skillsmatrixapplication.dto.AddOwnerDTO; // Assuming you created this DTO
 import com.skillsmatrixapplication.dto.EmployeeResponse;
 import com.skillsmatrixapplication.persistence.entity.Employee;
 import com.skillsmatrixapplication.service.EmployeeService;
@@ -24,18 +25,19 @@ public class OwnerController {
         return employeeService.getEmployeeOwners(employeeId);
     }
 
+
     @GetMapping("/currentEmployee")
     public ResponseEntity<List<Employee>> getCurrentEmployeeOwners() {
         return employeeService.getCurrentEmployeeOwners();
     }
 
     @PostMapping("/{employeeId}")
-    public ResponseEntity<EmployeeResponse> addOwner(@PathVariable Long employeeId, @RequestBody Employee owner) {
-        return employeeService.addOwner(employeeId, owner);
+    public ResponseEntity<EmployeeResponse> addOwner(@PathVariable Long employeeId, @RequestBody AddOwnerDTO ownerDTO) {
+        return employeeService.addOwner(employeeId, ownerDTO);
     }
 
     @PostMapping("/currentEmployee")
-    public ResponseEntity<EmployeeResponse> addCurrentEmployeeOwner(@RequestBody Employee owner) {
-        return employeeService.addCurrentEmployeeOwner(owner);
+    public ResponseEntity<EmployeeResponse> addCurrentEmployeeOwner(@RequestBody AddOwnerDTO ownerDTO) {
+        return employeeService.addCurrentEmployeeOwner(ownerDTO);
     }
 }

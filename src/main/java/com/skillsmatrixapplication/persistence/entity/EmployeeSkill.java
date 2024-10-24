@@ -15,15 +15,11 @@ public class EmployeeSkill {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonBackReference(value = "employee-employeeSkill")
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "employee_id")
-    private Employee employee;
+    @Column(name = "skill_id")
+    private Long skillId;
 
-    @JsonBackReference(value = "skill-employeeSkill")
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "skill_id")
-    private Skill skill;
+    @Column(name = "employee_id")
+    private Long employeeId;
 
     @Column
     private Double score;

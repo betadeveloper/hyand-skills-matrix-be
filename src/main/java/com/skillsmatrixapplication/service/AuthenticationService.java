@@ -42,9 +42,12 @@ public class AuthenticationService {
         employee.setEmail(input.getEmail());
         employee.setPassword(passwordEncoder.encode(input.getPassword()));
 
-        roleRepository.save(new Role(RoleEnum.ROLE_EMPLOYEE, "Employee"));
-        roleRepository.save(new Role(RoleEnum.ROLE_OWNER, "Owner"));
-        roleRepository.save(new Role(RoleEnum.ROLE_ADMIN, "Admin"));
+        if(roleRepository.findByRole(RoleEnum.ROLE_EMPLOYEE).isEmpty() && roleRepository.findByRole(RoleEnum.ROLE_OWNER).isEmpty() && roleRepository.findByRole(RoleEnum.ROLE_ADMIN).isEmpty()) {
+            roleRepository.save(new Role(RoleEnum.ROLE_EMPLOYEE, "Employee"));
+            roleRepository.save(new Role(RoleEnum.ROLE_OWNER, "Owner"));
+            roleRepository.save(new Role(RoleEnum.ROLE_ADMIN, "Admin"));
+        }
+
         employeeRoleRepository.save(new EmployeeRole(employee, roleRepository.findByRole(RoleEnum.ROLE_EMPLOYEE).get()));
 
         return employeeRepository.save(employee);

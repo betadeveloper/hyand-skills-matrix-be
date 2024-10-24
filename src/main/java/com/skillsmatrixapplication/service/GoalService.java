@@ -1,7 +1,6 @@
 package com.skillsmatrixapplication.service;
 
 import com.skillsmatrixapplication.dto.GoalResponse;
-import com.skillsmatrixapplication.persistence.entity.Employee;
 import com.skillsmatrixapplication.persistence.entity.Goal;
 import com.skillsmatrixapplication.persistence.repository.EmployeeRepository;
 import com.skillsmatrixapplication.persistence.repository.GoalRepository;
@@ -22,33 +21,37 @@ public class GoalService {
 
     public List<GoalResponse> getEmployeeGoals(Long employeeId) {
         return goalRepository.findAll().stream()
-                .filter(goal -> goal.getEmployee().getId().equals(employeeId))
+                .filter(goal -> goal.getEmployeeId().equals(employeeId))  // Compare using employeeId
                 .map(GoalResponse::of)
                 .toList();
     }
 
     public List<GoalResponse> getCurrentEmployeeGoals() {
         String currentEmployeeEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Employee currentEmployee = employeeRepository.findByEmail(currentEmployeeEmail)
-                .orElseThrow(() -> new RuntimeException("Current employee not found"));
+        Long currentEmployeeId = employeeRepository.findByEmail(currentEmployeeEmail)
+                .orElseThrow(() -> new RuntimeException("Current employee not found"))
+                .getId();
 
         return goalRepository.findAll().stream()
-                .filter(goal -> goal.getEmployee().getId().equals(currentEmployee.getId()))
+                .filter(goal -> goal.getEmployeeId().equals(currentEmployeeId))
                 .map(GoalResponse::of)
                 .toList();
     }
 
     public Goal createGoal(Goal goal) {
         String currentEmployeeEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Employee currentEmployee = employeeRepository.findByEmail(currentEmployeeEmail)
-                .orElseThrow(() -> new RuntimeException("Current employee not found"));
+        Long currentEmployeeId = employeeRepository.findByEmail(currentEmployeeEmail)
+                .orElseThrow(() -> new RuntimeException("Current employee not found"))
+                .getId();
 
-        goal.setEmployee(currentEmployee);
+        goal.setEmployeeId(currentEmployeeId);
         return goalRepository.save(goal);
     }
 
     public Goal updateGoal(Long id, Goal updatedGoal) {
-        Goal goal = goalRepository.findById(id).orElseThrow();
+        Goal goal = goalRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Goal not found"));
+
         goal.setName(updatedGoal.getName());
         goal.setDescription(updatedGoal.getDescription());
         goal.setDueDate(updatedGoal.getDueDate());

@@ -1,6 +1,7 @@
 package com.skillsmatrixapplication.persistence.entity;
 
 import com.skillsmatrixapplication.enums.GoalStatusEnum;
+import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,18 +23,19 @@ public class Goal {
     private String description;
 
     @Column
+    @Nullable
     private LocalDate startDate;
 
     @Column
     private LocalDate dueDate;
 
     @Column
+    @Nullable
     private LocalDate endDate;
 
     @Column
     private GoalStatusEnum status;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "employee_id")
-    private Employee employee;
+    @Column(name = "employee_id")
+    private Long employeeId;
 }

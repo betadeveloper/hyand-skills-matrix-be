@@ -1,7 +1,6 @@
 package com.skillsmatrixapplication.persistence.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import com.skillsmatrixapplication.enums.RoleEnum;
 import com.skillsmatrixapplication.model.enums.CareerLevel;
 import jakarta.persistence.*;
@@ -62,9 +61,6 @@ public class Employee implements UserDetails {
     private Date updatedAt;
 
     @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
-    @JsonManagedReference
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     private List<EmployeeRole> employeeRoles = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -75,14 +71,16 @@ public class Employee implements UserDetails {
     )
     private Set<Employee> owners = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "career_path_id")
     @JsonBackReference
     private CareerPath careerPath;
 
-    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
-    @JsonManagedReference
+    @OneToMany(fetch = FetchType.EAGER)
     private List<EmployeeSkill> employeeSkills;
+
+    @Column
+    private String currentRole;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

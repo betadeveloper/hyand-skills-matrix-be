@@ -26,15 +26,16 @@ public class GoalController {
         return ResponseEntity.ok(goalService.getCurrentEmployeeGoals());
     }
 
-    @PostMapping("/goal")
+    @PostMapping(value = "/goal", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Goal> createGoal(@RequestBody Goal goal) {
         return ResponseEntity.ok(goalService.createGoal(goal));
     }
 
-    @PutMapping("/goal/{id}")
+    @PutMapping(value = "/goal/{id}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Goal> updateGoal(@PathVariable Long id, @RequestBody Goal updatedGoal) {
         return ResponseEntity.ok(goalService.updateGoal(id, updatedGoal));
     }
+
 
     @DeleteMapping("/goal/{id}")
     public ResponseEntity<Void> deleteGoal(@PathVariable Long id) {
