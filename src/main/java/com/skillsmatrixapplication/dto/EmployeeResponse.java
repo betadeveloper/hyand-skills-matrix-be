@@ -1,9 +1,8 @@
 package com.skillsmatrixapplication.dto;
 
 import com.skillsmatrixapplication.enums.RoleEnum;
-import com.skillsmatrixapplication.model.enums.CareerLevel;
+import com.skillsmatrixapplication.enums.CareerLevel;
 import com.skillsmatrixapplication.persistence.entity.Employee;
-import com.skillsmatrixapplication.persistence.entity.Role;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

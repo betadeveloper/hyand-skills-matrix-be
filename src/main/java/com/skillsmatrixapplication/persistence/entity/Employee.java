@@ -2,12 +2,10 @@ package com.skillsmatrixapplication.persistence.entity;
 
 import com.fasterxml.jackson.annotation.*;
 import com.skillsmatrixapplication.enums.RoleEnum;
-import com.skillsmatrixapplication.model.enums.CareerLevel;
+import com.skillsmatrixapplication.enums.CareerLevel;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;

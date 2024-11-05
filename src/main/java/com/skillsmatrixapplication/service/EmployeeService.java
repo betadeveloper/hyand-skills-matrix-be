@@ -5,7 +5,7 @@ import com.skillsmatrixapplication.dto.AddOwnerDTO;
 import com.skillsmatrixapplication.dto.EmployeeResponse;
 import com.skillsmatrixapplication.exception.ExceptionMessages;
 import com.skillsmatrixapplication.exception.ResourceNotFoundException;
-import com.skillsmatrixapplication.model.enums.CareerLevel;
+import com.skillsmatrixapplication.enums.CareerLevel;
 import com.skillsmatrixapplication.persistence.entity.CareerPath;
 import com.skillsmatrixapplication.persistence.entity.Employee;
 import com.skillsmatrixapplication.persistence.entity.Skill;
@@ -169,4 +169,15 @@ public ResponseEntity<EmployeeResponse> addOwner(Long employeeId, AddOwnerDTO ow
         return ResponseEntity.ok(updatedEmployee);
     }
 
+    public ResponseEntity<List<Employee>> getCurrentOwnersEmployees() {
+        String currentEmployeeEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Employee currentEmployee = employeeRepository.findByEmail(currentEmployeeEmail)
+                .orElseThrow(() -> new RuntimeException("Current employee not found"));
+
+        List<Employee> ownersEmployees = new ArrayList<>();
+        for (Employee owner : currentEmployee.getOwners()) {
+            ownersEmployees.addAll(employeeRepository.findEmployeesByOwnerId(owner.getId()));
+        }
+        return ResponseEntity.ok(ownersEmployees);
+    }
 }

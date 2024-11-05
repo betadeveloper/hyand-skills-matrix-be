@@ -31,6 +31,11 @@ public class OwnerController {
         return employeeService.getCurrentEmployeeOwners();
     }
 
+    @GetMapping("/currentOwner/employees")
+    public ResponseEntity<List<Employee>> getCurrentOwnersEmployees() {
+        return employeeService.getCurrentOwnersEmployees();
+    }
+
     @PostMapping("/{employeeId}")
     public ResponseEntity<EmployeeResponse> addOwner(@PathVariable Long employeeId, @RequestBody AddOwnerDTO ownerDTO) {
         return employeeService.addOwner(employeeId, ownerDTO);

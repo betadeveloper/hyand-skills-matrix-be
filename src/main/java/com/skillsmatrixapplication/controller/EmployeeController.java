@@ -1,7 +1,7 @@
 package com.skillsmatrixapplication.controller;
 
 import com.skillsmatrixapplication.dto.EmployeeResponse;
-import com.skillsmatrixapplication.model.enums.CareerLevel;
+import com.skillsmatrixapplication.enums.CareerLevel;
 import com.skillsmatrixapplication.persistence.entity.Employee;
 import com.skillsmatrixapplication.persistence.entity.EmployeeRole;
 import com.skillsmatrixapplication.persistence.repository.EmployeeRepository;

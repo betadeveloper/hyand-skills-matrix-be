@@ -1,4 +1,4 @@
-package com.skillsmatrixapplication.model.enums;
+package com.skillsmatrixapplication.enums;
 
 public enum CareerLevel {
     JUNIOR,
