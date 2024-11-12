@@ -15,8 +15,6 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String employeeName;
-
     private LocalDate reviewDate;
 
     @Lob
@@ -28,4 +26,8 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private Employee owner;
 }
