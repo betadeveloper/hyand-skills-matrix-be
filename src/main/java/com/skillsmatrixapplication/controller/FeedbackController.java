@@ -1,5 +1,6 @@
 package com.skillsmatrixapplication.controller;
 
+import com.skillsmatrixapplication.dto.CreateFeedbackRequest;
 import com.skillsmatrixapplication.persistence.entity.Feedback;
 import com.skillsmatrixapplication.service.FeedbackService;
 import org.springframework.http.ResponseEntity;
@@ -37,8 +38,8 @@ public class FeedbackController {
     }
 
     @PostMapping
-    public ResponseEntity<Feedback> createFeedback(@RequestBody Feedback feedback) {
-        Feedback createdFeedback = feedbackService.createFeedback(feedback);
+    public ResponseEntity<Feedback> createFeedback(@RequestBody CreateFeedbackRequest createFeedbackRequest) {
+        Feedback createdFeedback = feedbackService.createFeedback(createFeedbackRequest);
         return ResponseEntity.ok(createdFeedback);
     }
 

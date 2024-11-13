@@ -1,5 +1,7 @@
 package com.skillsmatrixapplication.service;
 
+import com.skillsmatrixapplication.dto.CreateReviewRequest;
+import com.skillsmatrixapplication.enums.CareerLevel;
 import com.skillsmatrixapplication.enums.ReviewStatus;
 import com.skillsmatrixapplication.persistence.entity.Employee;
 import com.skillsmatrixapplication.persistence.entity.Review;
@@ -25,7 +27,8 @@ public class ReviewService {
         this.employeeRepository = employeeRepository;
     }
 
-    public void createReviewRequest() {
+
+    public void createReviewRequest(CreateReviewRequest createReviewRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentEmployeeEmail = authentication.getName();
 
@@ -34,14 +37,20 @@ public class ReviewService {
 
         Review review = new Review();
         review.setEmployee(employee);
+        review.setOwner(employee.getOwners().stream().findAny().orElse(null));
         review.setReviewDate(LocalDate.now());
         review.setStatus(ReviewStatus.NEW);
 
+        review.setCareerLevel(CareerLevel.valueOf(createReviewRequest.getCareerLevel()));
+        review.setEvaluatedCareerLevel(CareerLevel.valueOf(createReviewRequest.getEvaluatedCareerLevel()));
+
+        review.setReviewText(createReviewRequest.getReviewText());
+        review.setScore(createReviewRequest.getScore());
+
         reviewRepository.save(review);
     }
-
     public List<Review> getReviewsByOwnerId(Long ownerId) {
-        List<Employee> employees = employeeRepository.findEmployeesByOwnerId(ownerId);
+        List<Employee> employees = employeeRepository.findEmployeesManagedByOwner(ownerId);
         List<Review> reviews = new ArrayList<>();
 
         for (Employee employee : employees) {

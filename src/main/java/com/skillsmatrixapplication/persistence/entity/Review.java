@@ -1,5 +1,6 @@
 package com.skillsmatrixapplication.persistence.entity;
 
+import com.skillsmatrixapplication.enums.CareerLevel;
 import com.skillsmatrixapplication.enums.ReviewStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -17,8 +18,13 @@ public class Review {
 
     private LocalDate reviewDate;
 
-    @Lob
-    private String reviewReport;
+    private String reviewText;
+
+    private Double score;
+    @Enumerated(EnumType.STRING)
+    private CareerLevel careerLevel;
+    @Enumerated(EnumType.STRING)
+    private CareerLevel evaluatedCareerLevel;
 
     @Enumerated(EnumType.STRING)
     private ReviewStatus status;

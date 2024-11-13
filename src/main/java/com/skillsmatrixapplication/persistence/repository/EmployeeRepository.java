@@ -14,5 +14,5 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     Optional<Employee> findByEmail(String email);
 
     @Query("SELECT e FROM Employee e JOIN e.owners o WHERE o.id = :ownerId")
-    List<Employee> findEmployeesByOwnerId(@Param("ownerId") Long ownerId);
+    List<Employee> findEmployeesManagedByOwner(@Param("ownerId") Long ownerId);
 }

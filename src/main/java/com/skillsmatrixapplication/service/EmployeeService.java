@@ -174,10 +174,7 @@ public ResponseEntity<EmployeeResponse> addOwner(Long employeeId, AddOwnerDTO ow
         Employee currentEmployee = employeeRepository.findByEmail(currentEmployeeEmail)
                 .orElseThrow(() -> new RuntimeException("Current employee not found"));
 
-        List<Employee> ownersEmployees = new ArrayList<>();
-        for (Employee owner : currentEmployee.getOwners()) {
-            ownersEmployees.addAll(employeeRepository.findEmployeesByOwnerId(owner.getId()));
-        }
-        return ResponseEntity.ok(ownersEmployees);
+        List<Employee> managedEmployees = employeeRepository.findEmployeesManagedByOwner(currentEmployee.getId());
+        return ResponseEntity.ok(managedEmployees);
     }
 }
