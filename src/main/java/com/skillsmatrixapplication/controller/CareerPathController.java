@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/careerPaths")
 public class CareerPathController {
 
     private final CareerPathService careerPathService;
@@ -20,24 +20,30 @@ public class CareerPathController {
         this.careerPathService = careerPathService;
     }
 
-    @GetMapping("/careerPaths/all")
+    @GetMapping("/all")
     public ResponseEntity<List<CareerPath>> getAllCareerPaths() {
         return ResponseEntity.ok(careerPathService.getAllCareerPaths());
     }
 
-    @GetMapping("/careerPaths/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<CareerPath> getCareerPathById(@PathVariable Long id) {
         Optional<CareerPath> careerPath = careerPathService.getCareerPathById(id);
         return careerPath.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/careerPaths/{id}/employees")
+    @GetMapping("/{id}/employees")
     public ResponseEntity<List<Employee>> getEmployeesForCareerPath(@PathVariable Long id) {
         List<Employee> employees = careerPathService.getEmployeesForCareerPath(id);
         return employees.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(employees);
     }
 
-    @PostMapping("/careerPaths")
+    @GetMapping("/current")
+    public ResponseEntity<Optional<CareerPath>> getCurrentEmployeeCareerPath() {
+        Optional<CareerPath> careerPath = careerPathService.getCurrentEmployeeCareerPath();
+        return ResponseEntity.ok(careerPath);
+    }
+
+    @PostMapping
     public ResponseEntity<CareerPath> createCareerPath(@RequestBody CreateCareerPathRequest request) {
         CareerPath careerPath = new CareerPath();
         careerPath.setName(request.getName());
@@ -45,20 +51,20 @@ public class CareerPathController {
         return ResponseEntity.ok(careerPathService.createCareerPath(careerPath));
     }
 
-    @PutMapping("/careerPaths/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<CareerPath> updateCareerPath(@PathVariable Long id, @RequestBody CareerPath newCareerPathDetails) {
         return careerPathService.updateCareerPath(id, newCareerPathDetails)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/careerPaths/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCareerPath(@PathVariable Long id) {
         careerPathService.deleteCareerPath(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/careerPaths/{id}/assignEmployees")
+    @PutMapping("/{id}/assignEmployees")
     public ResponseEntity<CareerPath> assignEmployeesToCareerPath(
             @PathVariable Long id,
             @RequestBody List<Long> employeeIds) {

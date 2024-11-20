@@ -4,6 +4,7 @@ import com.skillsmatrixapplication.persistence.entity.CareerPath;
 import com.skillsmatrixapplication.persistence.entity.Employee;
 import com.skillsmatrixapplication.persistence.repository.CareerPathRepository;
 import com.skillsmatrixapplication.persistence.repository.EmployeeRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public class CareerPathService {
     private final CareerPathRepository careerPathRepository;
     private final EmployeeRepository employeeRepository;
 
-    public CareerPathService(CareerPathRepository careerPathRepository, EmployeeRepository employeeRepository) {
+    public CareerPathService(CareerPathRepository careerPathRepository, EmployeeRepository employeeRepository, EmployeeService employeeService) {
         this.careerPathRepository = careerPathRepository;
         this.employeeRepository = employeeRepository;
     }
@@ -26,6 +27,11 @@ public class CareerPathService {
 
     public Optional<CareerPath> getCareerPathById(Long id) {
         return careerPathRepository.findById(id);
+    }
+
+    public Optional<CareerPath> getCurrentEmployeeCareerPath() {
+        String currentEmployeeEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        return Optional.ofNullable(employeeRepository.getCurrentEmployeeCareerPath(currentEmployeeEmail));
     }
 
     public CareerPath createCareerPath(CareerPath careerPath) {

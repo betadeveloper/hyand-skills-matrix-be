@@ -4,6 +4,7 @@ import com.skillsmatrixapplication.dto.CreateReviewRequest;
 import com.skillsmatrixapplication.persistence.entity.Review;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -54,6 +55,12 @@ public class ReviewController {
     @PutMapping("/{reviewId}/reject")
     public ResponseEntity<Void> rejectReview(@PathVariable Long reviewId) {
         reviewService.rejectReview(reviewId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{reviewId}")
+    public ResponseEntity<Void> deleteReview(@PathVariable Long reviewId) {
+        reviewService.deleteReview(reviewId);
         return ResponseEntity.ok().build();
     }
 }
