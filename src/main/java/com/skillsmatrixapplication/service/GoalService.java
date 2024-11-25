@@ -78,6 +78,15 @@ public class GoalService {
 
 
     public void deleteGoal(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Goal ID cannot be null");
+        }
+
+        if (!goalRepository.existsById(id)) {
+            throw new IllegalArgumentException("Goal with ID " + id + " does not exist");
+        }
+
         goalRepository.deleteById(id);
     }
+
 }

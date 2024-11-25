@@ -39,6 +39,10 @@ public class CareerPathService {
     }
 
     public Optional<CareerPath> updateCareerPath(Long id, CareerPath newCareerPathDetails) {
+        if (newCareerPathDetails == null || newCareerPathDetails.getName() == null || newCareerPathDetails.getDescription() == null) {
+            throw new IllegalArgumentException("Career path details are invalid.");
+        }
+
         return careerPathRepository.findById(id).map(careerPath -> {
             careerPath.setName(newCareerPathDetails.getName());
             careerPath.setDescription(newCareerPathDetails.getDescription());
@@ -46,6 +50,7 @@ public class CareerPathService {
             return careerPathRepository.save(careerPath);
         });
     }
+
 
     public void deleteCareerPath(Long id) {
         careerPathRepository.deleteById(id);
@@ -67,6 +72,7 @@ public class CareerPathService {
         careerPath.setEmployees(employees);
         return Optional.of(careerPathRepository.save(careerPath));
     }
+
 
     public List<Employee> getEmployeesForCareerPath(Long id) {
         Optional<CareerPath> careerPathOpt = careerPathRepository.findById(id);

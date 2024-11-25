@@ -75,7 +75,6 @@ class EmployeeServiceTest {
         CareerPath careerPath = new CareerPath();
         careerPath.setEmployees(Collections.singletonList(employee));
         Skill skill = new Skill();
-        skill.setCareerPath(careerPath);
 
         when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
         when(careerPathRepository.findById(careerPathId)).thenReturn(Optional.of(careerPath));
