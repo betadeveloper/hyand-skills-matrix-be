@@ -1,8 +1,10 @@
 package com.skillsmatrixapplication.service;
 
 import com.skillsmatrixapplication.dto.EmployeeResponse;
+import com.skillsmatrixapplication.enums.RoleEnum;
 import com.skillsmatrixapplication.persistence.entity.CareerPath;
 import com.skillsmatrixapplication.persistence.entity.Employee;
+import com.skillsmatrixapplication.persistence.entity.Role;
 import com.skillsmatrixapplication.persistence.entity.Skill;
 import com.skillsmatrixapplication.persistence.repository.CareerPathRepository;
 import com.skillsmatrixapplication.persistence.repository.EmployeeRepository;
@@ -18,6 +20,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -102,4 +106,54 @@ class EmployeeServiceTest {
 
         assertEquals(200, result.getStatusCodeValue());
     }
+
+    @Test
+    void testGetEmployeeById() {
+        Long employeeId = 1L;
+        Employee employee = new Employee();
+        employee.setId(employeeId);
+        employee.setFirstName("John");
+
+        when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
+
+        Optional<Employee> result = employeeRepository.findById(employeeId);
+
+        assertEquals(employeeId, result.get().getId());
+        assertEquals("John", result.get().getFirstName());
+        verify(employeeRepository, times(1)).findById(employeeId);
     }
+
+    @Test
+    void testGetAllEmployees() {
+        Employee employee1 = new Employee();
+        employee1.setId(1L);
+        employee1.setFirstName("John");
+
+        Employee employee2 = new Employee();
+        employee2.setId(2L);
+        employee2.setFirstName("Jane");
+
+        when(employeeRepository.findAll()).thenReturn(List.of(employee1, employee2));
+
+        List<Employee> employees = employeeRepository.findAll();
+
+        assertEquals(2, employees.size());
+        assertEquals("John", employees.get(0).getFirstName());
+        assertEquals("Jane", employees.get(1).getFirstName());
+        verify(employeeRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testGetEmployeeByIdNotFound() {
+        Long employeeId = 99L;
+
+        when(employeeRepository.findById(employeeId)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            employeeService.getEmployeeById(employeeId);
+        });
+
+        assertEquals("Employee not found", exception.getMessage());
+        verify(employeeRepository, times(1)).findById(employeeId);
+    }
+}

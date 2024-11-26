@@ -1,6 +1,8 @@
 package com.skillsmatrixapplication.service;
 
 import com.skillsmatrixapplication.dto.CreateReviewRequest;
+import com.skillsmatrixapplication.dto.EmployeeResponse;
+import com.skillsmatrixapplication.dto.ReviewResponse;
 import com.skillsmatrixapplication.enums.CareerLevel;
 import com.skillsmatrixapplication.enums.ReviewStatus;
 import com.skillsmatrixapplication.persistence.entity.Employee;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewService {
@@ -26,7 +29,6 @@ public class ReviewService {
         this.reviewRepository = reviewRepository;
         this.employeeRepository = employeeRepository;
     }
-
 
     public void createReviewRequest(CreateReviewRequest createReviewRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -49,25 +51,35 @@ public class ReviewService {
 
         reviewRepository.save(review);
     }
-    public List<Review> getReviewsByOwnerId(Long ownerId) {
+
+    public List<ReviewResponse> getReviewsByOwnerId(Long ownerId) {
         List<Employee> employees = employeeRepository.findEmployeesManagedByOwner(ownerId);
-        List<Review> reviews = new ArrayList<>();
 
-        for (Employee employee : employees) {
-            reviews.addAll(reviewRepository.findByEmployeeId(employee.getId()));
-        }
-
-        return reviews;
+        return employees.stream()
+                .flatMap(employee -> reviewRepository.findByEmployeeId(employee.getId()).stream()
+                        .map(review -> new ReviewResponse(
+                                review.getId(),
+                                review.getReviewText(),
+                                review.getScore(),
+                                review.getCareerLevel(),
+                                review.getEvaluatedCareerLevel(),
+                                EmployeeResponse.of(review.getEmployee()),
+                                EmployeeResponse.of(review.getOwner()),
+                                review.getReviewDate().toString(),
+                                review.getStatus()
+                        ))
+                )
+                .collect(Collectors.toList());
     }
 
-    public List<Review> getCurrentOwnersEmployeeReviews() {
+
+    public List<ReviewResponse> getCurrentOwnersEmployeeReviews() {
         String currentOwnerEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         Employee currentOwner = employeeRepository.findByEmail(currentOwnerEmail)
                 .orElseThrow(() -> new RuntimeException("Current owner not found"));
 
         return getReviewsByOwnerId(currentOwner.getId());
     }
-
     public void approveReview(Long reviewId) {
         Review review = reviewRepository.findById(reviewId).orElseThrow();
         review.setStatus(ReviewStatus.APPROVED);

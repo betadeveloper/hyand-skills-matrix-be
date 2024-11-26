@@ -3,6 +3,7 @@ package com.skillsmatrixapplication.service;
 
 import com.skillsmatrixapplication.dto.AddOwnerDTO;
 import com.skillsmatrixapplication.dto.EmployeeResponse;
+import com.skillsmatrixapplication.enums.RoleEnum;
 import com.skillsmatrixapplication.exception.ExceptionMessages;
 import com.skillsmatrixapplication.exception.ResourceNotFoundException;
 import com.skillsmatrixapplication.enums.CareerLevel;
@@ -81,6 +82,7 @@ public class EmployeeService {
             return ResponseEntity.notFound().build();
         }
     }
+
     @Transactional
     public ResponseEntity<EmployeeResponse> updateCurrentEmployee(EmployeeResponse newEmployeeDetails) {
         String currentEmployeeEmail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -108,6 +110,18 @@ public class EmployeeService {
         EmployeeResponse updatedEmployee = EmployeeResponse.of(employeeRepository.save(currentEmployee));
 
         return ResponseEntity.ok(updatedEmployee);
+    }
+
+    @Transactional
+    public ResponseEntity<Employee> getEmployeeById(Long id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionMessages.EMPLOYEE_NOT_FOUND));
+        return ResponseEntity.ok(employee);
+    }
+
+    @Transactional
+    public void deleteEmployee(Long id) {
+        employeeRepository.deleteById(id);
     }
 
     @Transactional
@@ -169,12 +183,13 @@ public ResponseEntity<EmployeeResponse> addOwner(Long employeeId, AddOwnerDTO ow
         return ResponseEntity.ok(updatedEmployee);
     }
 
-    public ResponseEntity<List<Employee>> getCurrentOwnersEmployees() {
+    public ResponseEntity<List<EmployeeResponse>> getCurrentOwnersEmployees() {
         String currentEmployeeEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         Employee currentEmployee = employeeRepository.findByEmail(currentEmployeeEmail)
                 .orElseThrow(() -> new RuntimeException("Current employee not found"));
 
         List<Employee> managedEmployees = employeeRepository.findEmployeesManagedByOwner(currentEmployee.getId());
-        return ResponseEntity.ok(managedEmployees);
+        List<EmployeeResponse> managedEmployeeResponse = managedEmployees.stream().map(EmployeeResponse::of).toList();
+        return ResponseEntity.ok(managedEmployeeResponse);
     }
 }

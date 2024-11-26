@@ -10,6 +10,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RoleService {
 
@@ -35,8 +37,21 @@ public class RoleService {
         return employeeRoleRepository.save(employeeRole);
     }
 
+    public List<Role> getAllRoles() {
+        return roleRepository.findAll();
+    }
+
     @Transactional
     public EmployeeRole getEmployeeRole(Long employeeId) {
         return employeeRoleRepository.findByEmployeeId(employeeId);
     }
+
+    @Transactional
+    public void deleteRole(Long id) {
+        if (!roleRepository.existsById(id)) {
+            throw new RuntimeException("Role not found");
+        }
+            roleRepository.deleteById(id);
+    }
+
 }

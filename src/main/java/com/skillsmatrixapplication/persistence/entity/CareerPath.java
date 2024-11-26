@@ -1,5 +1,6 @@
 package com.skillsmatrixapplication.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -35,5 +36,6 @@ public class CareerPath {
 
     @OneToMany(fetch = FetchType.EAGER)
     @JsonManagedReference
+    @JsonIgnore
     private List<Employee> employees;
 }

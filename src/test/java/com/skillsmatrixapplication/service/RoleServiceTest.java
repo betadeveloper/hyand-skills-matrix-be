@@ -12,8 +12,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -65,4 +67,58 @@ class RoleServiceTest {
         verify(roleRepository, times(1)).findById(roleId);
         verify(employeeRoleRepository, times(1)).save(any(EmployeeRole.class));
     }
+
+    @Test
+    void testGetAllRoles() {
+        Role role1 = new Role();
+        role1.setId(1L);
+        Role role2 = new Role();
+        role2.setId(2L);
+
+        when(roleRepository.findAll()).thenReturn(List.of(role1, role2));
+
+        List<Role> result = roleService.getAllRoles();
+
+        assertEquals(2, result.size());
+        assertEquals(1L, result.get(0).getId());
+        assertEquals(2L, result.get(1).getId());
+        verify(roleRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testDeleteRoleNotFound() {
+        Long roleId = 1L;
+
+        when(roleRepository.existsById(roleId)).thenReturn(false);
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            roleService.deleteRole(roleId);
+        });
+
+        assertEquals("Role not found", exception.getMessage());
+        verify(roleRepository, times(1)).existsById(roleId);
+        verify(roleRepository, times(0)).deleteById(roleId);
+    }
+
+    @Test
+    void testAssignNonExistentRoleToEmployee() {
+        Long employeeId = 1L;
+        Long roleId = 1L;
+        Employee employee = new Employee();
+        employee.setId(employeeId);
+
+        when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
+        when(roleRepository.findById(roleId)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            roleService.assignRoleToEmployee(employeeId, roleId);
+        });
+
+        assertEquals("Role not found", exception.getMessage());
+        verify(employeeRepository, times(1)).findById(employeeId);
+        verify(roleRepository, times(1)).findById(roleId);
+        verify(employeeRoleRepository, times(0)).save(any(EmployeeRole.class));
+    }
+
+
 }

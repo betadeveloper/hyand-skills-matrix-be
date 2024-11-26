@@ -21,8 +21,6 @@ public class EmployeeResponse {
     private String position;
     private CareerLevel careerLevel;
     private String department;
-    private Date createdAt;
-    private Date updatedAt;
     private List<RoleEnum> roles;
 
     public static EmployeeResponse of(final Employee employee) {
@@ -34,8 +32,6 @@ public class EmployeeResponse {
                 .position(employee.getPosition())
                 .careerLevel(employee.getCareerLevel())
                 .department(employee.getDepartment())
-                .createdAt(employee.getCreatedAt())
-                .updatedAt(employee.getUpdatedAt())
                 .roles(employee.getRoles())
                 .build();
     }

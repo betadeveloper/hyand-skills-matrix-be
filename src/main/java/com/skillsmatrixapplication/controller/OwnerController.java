@@ -32,7 +32,7 @@ public class OwnerController {
     }
 
     @GetMapping("/currentOwner/employees")
-    public ResponseEntity<List<Employee>> getCurrentOwnersEmployees() {
+    public ResponseEntity<List<EmployeeResponse>> getCurrentOwnersEmployees() {
         return employeeService.getCurrentOwnersEmployees();
     }
 

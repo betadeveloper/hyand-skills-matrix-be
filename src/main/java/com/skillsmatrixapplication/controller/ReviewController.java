@@ -1,6 +1,7 @@
 package com.skillsmatrixapplication.controller;
 
 import com.skillsmatrixapplication.dto.CreateReviewRequest;
+import com.skillsmatrixapplication.dto.ReviewResponse;
 import com.skillsmatrixapplication.persistence.entity.Review;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,14 +30,14 @@ public class ReviewController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Review>> getReviews(@RequestParam Long ownerId) {
-        List<Review> reviews = reviewService.getReviewsByOwnerId(ownerId);
+    public ResponseEntity<List<ReviewResponse>> getReviews(@RequestParam Long ownerId) {
+        List<ReviewResponse> reviews = reviewService.getReviewsByOwnerId(ownerId);
         return ResponseEntity.ok(reviews);
     }
 
     @GetMapping("/currentOwner")
-    public ResponseEntity<List<Review>> getCurrentOwnersEmployeeReviews() {
-        List<Review> reviews = reviewService.getCurrentOwnersEmployeeReviews();
+    public ResponseEntity<List<ReviewResponse>> getCurrentOwnersEmployeeReviews() {
+        List<ReviewResponse> reviews = reviewService.getCurrentOwnersEmployeeReviews();
         return ResponseEntity.ok(reviews);
     }
 

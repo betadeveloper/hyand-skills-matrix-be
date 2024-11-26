@@ -122,9 +122,4 @@ public class Employee implements UserDetails {
                 .map(employeeRole -> employeeRole.getRole().getRole())
                 .toList();
     }
-
-    public void addRole(Role role) {
-        EmployeeRole employeeRole = new EmployeeRole(this, role);
-        this.employeeRoles.add(employeeRole);
-    }
 }
