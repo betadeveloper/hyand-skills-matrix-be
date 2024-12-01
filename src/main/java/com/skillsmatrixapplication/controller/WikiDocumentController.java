@@ -57,36 +57,53 @@ public class WikiDocumentController {
 
         String fileName = document.getTitle();
         String fileType = document.getFileType();
+        String fileExtension = getFileExtension(fileType);
 
-        if (fileType != null) {
-            String extension = getFileExtension(fileType);
-            if (!fileName.toLowerCase().endsWith(extension)) {
-                fileName += extension;
-            }
+        if (!fileName.endsWith(fileExtension)) {
+            fileName += fileExtension;
+        }
+
+        MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM;
+        switch (fileType.toLowerCase()) {
+            case "application/pdf":
+                mediaType = MediaType.APPLICATION_PDF;
+                break;
+            case "image/jpeg":
+            case "image/png":
+            case "image/gif":
+                mediaType = MediaType.IMAGE_JPEG;
+                break;
+            case "text/plain":
+                mediaType = MediaType.TEXT_PLAIN;
+                break;
         }
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
-                .contentType(MediaType.APPLICATION_PDF)
+                .contentType(mediaType)
                 .body(document.getFileData());
     }
+
 
     private String getFileExtension(String fileType) {
         switch (fileType) {
             case "application/pdf":
                 return ".pdf";
             case "image/jpeg":
-                return ".jpg";
+                return ".jpeg";
             case "image/png":
                 return ".png";
             case "application/msword":
                 return ".doc";
             case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
                 return ".docx";
+            case "text/plain":
+                return ".txt";
             default:
                 return "";
         }
     }
+
 
     @DeleteMapping("/{id}")
     public void deleteDocument(@PathVariable Long id) {
