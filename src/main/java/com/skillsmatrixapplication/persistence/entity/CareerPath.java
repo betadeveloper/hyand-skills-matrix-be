@@ -28,9 +28,6 @@ public class CareerPath {
     @Column
     private String description;
 
-    @Column
-    private Double score;
-
     @OneToMany(cascade = CascadeType.ALL)
     private List<Skill> skills;
 

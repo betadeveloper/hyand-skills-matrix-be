@@ -65,13 +65,12 @@ public class ReviewService {
                                 review.getEvaluatedCareerLevel(),
                                 EmployeeResponse.of(review.getEmployee()),
                                 EmployeeResponse.of(review.getOwner()),
-                                review.getReviewDate().toString(),
+                                review.getReviewDate(),
                                 review.getStatus()
                         ))
                 )
                 .collect(Collectors.toList());
     }
-
 
     public List<ReviewResponse> getCurrentOwnersEmployeeReviews() {
         String currentOwnerEmail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -80,11 +79,20 @@ public class ReviewService {
 
         return getReviewsByOwnerId(currentOwner.getId());
     }
+
     public void approveReview(Long reviewId) {
-        Review review = reviewRepository.findById(reviewId).orElseThrow();
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new RuntimeException("Review not found"));
         review.setStatus(ReviewStatus.APPROVED);
+        Employee employee = review.getEmployee();
+        if (employee != null) {
+            employee.setCareerLevel(review.getEvaluatedCareerLevel());
+        } else {
+            throw new RuntimeException("Employee not associated with the review");
+        }
         reviewRepository.save(review);
+        employeeRepository.save(employee);
     }
+
 
     public void rejectReview(Long reviewId) {
         Review review = reviewRepository.findById(reviewId).orElseThrow();

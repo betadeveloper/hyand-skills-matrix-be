@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -17,6 +19,6 @@ public class ReviewResponse {
     private CareerLevel evaluatedCareerLevel;
     private EmployeeResponse employee;
     private EmployeeResponse owner;
-    private String reviewDate;
+    private LocalDate reviewDate;
     private ReviewStatus status;
 }

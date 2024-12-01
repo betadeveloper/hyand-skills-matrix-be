@@ -54,9 +54,10 @@ public class EmployeeController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'OWNER')")
     @GetMapping("/employees/{id}")
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
+    public ResponseEntity<EmployeeResponse> getEmployeeById(@PathVariable Long id) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(id);
-        return optionalEmployee.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return optionalEmployee.map(employee -> ResponseEntity.ok(EmployeeResponse.of(employee)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'OWNER')")

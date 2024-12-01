@@ -74,8 +74,6 @@ public class Employee implements UserDetails {
     @JsonBackReference
     private CareerPath careerPath;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    private List<EmployeeSkill> employeeSkills;
 
     @Column
     private String currentRole;

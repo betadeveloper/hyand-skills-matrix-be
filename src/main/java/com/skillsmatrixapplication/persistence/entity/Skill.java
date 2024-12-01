@@ -31,8 +31,4 @@ public class Skill {
 
     @Column(name = "career_path_id")
     private Long careerPathId;
-
-    @OneToMany(fetch = FetchType.EAGER)
-    private List<EmployeeSkill> employeeSkills;
-
 }
