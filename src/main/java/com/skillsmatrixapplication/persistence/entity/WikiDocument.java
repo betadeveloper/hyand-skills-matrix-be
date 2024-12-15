@@ -18,9 +18,16 @@ public class WikiDocument {
 
     @Lob
     @Column(name = "file_data", columnDefinition = "MEDIUMBLOB")
-    private byte[] fileData;
+    private byte[] cfileData;
 
     private String fileType;
     private String author;
 
+    public byte[] getFileData() {
+        return cfileData;
+    }
+
+    public void setFileData(byte[] fileData) {
+        this.cfileData = fileData;
+    }
 }
