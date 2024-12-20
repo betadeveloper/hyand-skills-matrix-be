@@ -1,25 +1,10 @@
 # Skills Matrix Framework Backend
 
-The Skills Matrix Framework is an internal tool designed to help employees track their skills and career progression within the organization. This system is built to provide a comprehensive overview of skillsets, facilitate performance reviews, and offer feedback for personal and professional growth.
+The backend of the Skills Matrix Framework is a Java (Spring Framework) based application designed to do the server-side handling of the interface for managing skills, career paths, and feedback processes. The frontend uses the backend to retrieve, process and in other ways communicate data.
 
-## Key Features
+## Backend Technology Stack
 
-- **Skill Management:**
-  Employees can document and update their skill levels, categorize skills, and view progression over time.
-
-- **Career Path Tracking:**
-  Allows employees to map out potential career paths within the organization and identify skills required for advancement.
-
-- **Feedback System:**
-  Collect feedback after meetings or reviews, helping employees improve based on actionable insights.
-
-- **Security and Access Control:**
-  Implements JWT authentication with role-based access control to ensure data security.
-
-## Technology Stack
-
-- **Frontend:** React
-- **Backend:** Java with Spring Framework
+- **Programming Language:** Java with Spring Framework
 - **Database:** MySQL
 - **Authentication:** JSON Web Tokens (JWT)
 
@@ -28,7 +13,6 @@ The Skills Matrix Framework is an internal tool designed to help employees track
 ### Prerequisites
 
 - Java 17 or higher
-- Node.js 18 or higher
 - MySQL Server
 - Docker
 
