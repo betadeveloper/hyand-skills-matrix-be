@@ -119,6 +119,4 @@ class RoleServiceTest {
         verify(roleRepository, times(1)).findById(roleId);
         verify(employeeRoleRepository, times(0)).save(any(EmployeeRole.class));
     }
-
-
 }
